@@ -47,9 +47,9 @@ blueprint:
           filter:
             domain: notify
 
-  variables:
-    medication_owner_entity: !input medication_owner
-    medication_counter_entity: !input medication_counter
+variables:
+  medication_owner_entity: !input medication_owner
+  medication_counter_entity: !input medication_counter
 
 trigger:
   - platform: time
