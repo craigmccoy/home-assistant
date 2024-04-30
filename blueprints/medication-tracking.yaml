@@ -13,7 +13,7 @@ blueprint:
             domain: counter
     medication_doses:
       name: Doses
-      description: How many pils, puffs, etc each dose?
+      description: How many pills, puffs, etc each dose?
       default: 1
       selector:
         number:
@@ -43,9 +43,7 @@ blueprint:
       name: Notifications
       description: Where to send medication notifications?
       selector:
-        entity:
-          filter:
-            domain: notify
+        action:
 
 variables:
   medication_owner_entity: !input medication_owner
