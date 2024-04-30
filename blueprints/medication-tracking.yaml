@@ -1,0 +1,90 @@
+blueprint:
+  name: Medication Tracking
+  description: Tracks medication usage and sends out notifications for refills
+  domain: automation
+
+  input:
+    medication_counter:
+      name: Medication counter
+      description: Counter used to track medication
+      selector:
+        target:
+          entity:
+            domain: counter
+    medication_doses:
+      name: Doses
+      description: How many pils, puffs, etc each dose?
+      default: 1
+      selector:
+        number:
+          min: 1
+    medication_refill_threshold:
+      name: Refill threshold
+      description: Threshold when to send out refill notifications
+      default: 14
+      selector:
+        number:
+          min: 1
+    medication_reminder_time:
+      name: Reminder time
+      description: When to send the medication reminders?
+      selector:
+        time:
+    medication_owner:
+      name: Owner
+      description: Who does this medication belong to?
+      selector:
+        target:
+          entity:
+            domain: person
+    medication_notify:
+      name: Notifications
+      Description: Where to send medication notifications?
+      selector:
+        entity:
+          filter:
+            domain: notify
+
+  variables:
+    medication_owner_entity: !input medication_owner
+    medication_counter_entity: !input medication_counter
+
+trigger:
+  - platform: time
+    at: !input medication_reminder_time
+action:
+  - repeat:
+      count: 1
+      sequence:
+        - service: counter.decrement
+          target:
+            entity_id: !input medication_doses
+          data: {}
+  - delay:
+      hours: 0
+      minutes: 5
+      seconds: 0
+      milliseconds: 0
+  - choose:
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input medication_counter
+            below: 1
+        sequence:
+          - service: !input medication_notify
+            data:
+              title: Medication Empty
+              message: >-
+                {{ state_attr(medication_owner_entity, 'friendly_name') }} is probably out of their {{ state_attr(medication_counter_entity, 'friendly_name') }} medication.
+      - conditions:
+          - condition: numeric_state
+            entity_id: !input medication_counter
+            below: !input medication_refill_threshold
+        sequence:
+          - service: !input medication_notify
+            data:
+              title: Medication Refill Needed
+              message: >-
+                {{ state_attr(medication_owner_entity, 'friendly_name') }} has {{ states(medication_counter_entity) }} {{ state_attr(medication_counter_entity, 'friendly_name') }} dose(s) remaining.
+    default: []
+mode: single
