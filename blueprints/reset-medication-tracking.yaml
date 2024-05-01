@@ -19,6 +19,6 @@ sequence:
   - service: counter.set_value
     metadata: {}
     data:
-      value: {{ state_attr(medication_counter_entity, 'initial') }}
+      value: "{{ state_attr(medication_counter_entity, 'initial') }}"
 
 mode: single
