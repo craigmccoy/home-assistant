@@ -41,9 +41,9 @@ blueprint:
             domain: person
     medication_notify:
       name: Notifications
-      description: Where to send medication notifications?
+      description: Where to send medication notifications? (e.g. notify.*)
       selector:
-        action:
+        text:
 
 variables:
   medication_owner_entity: !input medication_owner
