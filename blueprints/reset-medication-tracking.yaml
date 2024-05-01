@@ -1,0 +1,24 @@
+blueprint:
+  name: Reset Medication Tracking
+  description: Resets medication tracking entity
+  domain: script
+
+  input:
+    medication_counter:
+      name: Medication counter entity
+      description: Counter used to track medication
+      selector:
+        entity:
+          filter:
+            domain: counter
+
+variables:
+  medication_counter_entity: !input medication_counter
+
+sequence:
+  - service: counter.set_value
+    metadata: {}
+    data:
+      value: {{ state_attr(medication_counter_entity, 'initial') }}
+
+mode: single
