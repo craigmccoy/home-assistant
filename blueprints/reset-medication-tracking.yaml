@@ -18,6 +18,8 @@ variables:
 sequence:
   - service: counter.set_value
     metadata: {}
+    target:
+      entity_id: !input medication_counter
     data:
       value: "{{ state_attr(medication_counter_entity, 'initial') }}"
 
