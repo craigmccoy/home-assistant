@@ -8,8 +8,8 @@ blueprint:
       name: Medication counter
       description: Counter used to track medication
       selector:
-        target:
-          entity:
+        entity:
+          filter:
             domain: counter
     medication_doses:
       name: Doses
@@ -36,8 +36,8 @@ blueprint:
       name: Owner
       description: Who does this medication belong to?
       selector:
-        target:
-          entity:
+        entity:
+          filter:
             domain: person
     medication_notify:
       name: Notifications
@@ -58,7 +58,7 @@ action:
       sequence:
         - service: counter.decrement
           target:
-            entity_id: '{{ medication_counter_entity }}'
+            entity_id: !input medication_counter
           data: {}
   - delay:
       hours: 0
@@ -78,7 +78,7 @@ action:
                 {{ state_attr(medication_owner_entity, 'friendly_name') }} is probably out of their {{ state_attr(medication_counter_entity, 'friendly_name') }} medication.
       - conditions:
           - condition: numeric_state
-            entity_id: '{{ medication_counter_entity }}'
+            entity_id: !input medication_counter
             below: !input medication_refill_threshold
         sequence:
           - service: !input medication_notify
