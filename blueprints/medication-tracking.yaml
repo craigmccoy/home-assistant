@@ -78,7 +78,7 @@ action:
                 {{ state_attr(medication_owner_entity, 'friendly_name') }} is probably out of their {{ state_attr(medication_counter_entity, 'friendly_name') }} medication.
       - conditions:
           - condition: numeric_state
-            entity_id: !input medication_counter
+            entity_id: '{{ medication_counter_entity }}'
             below: !input medication_refill_threshold
         sequence:
           - service: !input medication_notify
