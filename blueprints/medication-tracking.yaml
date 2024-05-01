@@ -54,11 +54,11 @@ trigger:
     at: !input medication_reminder_time
 action:
   - repeat:
-      count: 1
+      count: !input medication_doses
       sequence:
         - service: counter.decrement
           target:
-            entity_id: !input medication_doses
+            entity_id: !input medication_counter
           data: {}
   - delay:
       hours: 0
