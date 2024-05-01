@@ -58,7 +58,7 @@ action:
       sequence:
         - service: counter.decrement
           target:
-            entity_id: !input medication_counter
+            entity_id: '{{ medication_counter_entity }}'
           data: {}
   - delay:
       hours: 0
