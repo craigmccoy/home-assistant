@@ -5,14 +5,14 @@ blueprint:
 
   input:
     medication_counter:
-      name: Medication counter
+      name: Medication counter entity
       description: Counter used to track medication
       selector:
         entity:
           filter:
             domain: counter
     medication_doses:
-      name: Doses
+      name: Doses per day
       description: How many pills, puffs, etc each dose?
       default: 1
       selector:
@@ -33,7 +33,7 @@ blueprint:
       selector:
         time:
     medication_owner:
-      name: Owner
+      name: Owner entity
       description: Who does this medication belong to?
       selector:
         entity:
@@ -73,7 +73,7 @@ action:
         sequence:
           - service: !input medication_notify
             data:
-              title: Medication Empty
+              title: You're empty!
               message: >-
                 {{ state_attr(medication_owner_entity, 'friendly_name') }} is probably out of their {{ state_attr(medication_counter_entity, 'friendly_name') }} medication.
       - conditions:
@@ -83,7 +83,7 @@ action:
         sequence:
           - service: !input medication_notify
             data:
-              title: Medication Refill Needed
+              title: Refill Needed!
               message: >-
                 {{ state_attr(medication_owner_entity, 'friendly_name') }} has {{ states(medication_counter_entity) }} {{ state_attr(medication_counter_entity, 'friendly_name') }} dose(s) remaining.
     default: []
