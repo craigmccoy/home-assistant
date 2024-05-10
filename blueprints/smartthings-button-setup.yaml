@@ -31,46 +31,38 @@ blueprint:
         action: {}
 
 variables:
-  button_id: !input button_id
-  press_action: !input press_action
-  double_press_action: !input double_press_action
-  hold_action: !input hold_action
+  button_id: !input 'button_id'
+  press_action: !input 'press_action'
+  double_press_action: !input 'double_press_action'
+  hold_action: !input 'hold_action'
 
 trigger:
   - platform: event
     event_type: smartthings.button
     event_data:
-      component_id: main
-      device_id: !input button_id
+      device_id: !input 'button_id'
       value: pushed
-    id: pushed
   - platform: event
     event_type: smartthings.button
     event_data:
-      component_id: main
-      device_id: !input button_id
+      device_id: !input 'button_id'
       value: double
-    id: double
   - platform: event
     event_type: smartthings.button
     event_data:
-      component_id: main
-      device_id: !input button_id
+      device_id: !input 'button_id'
       value: held
-    id: held
 
 action:
   - choose:
       - conditions:
-          - condition: trigger
-            id:
-              - held
-        sequence: !input hold_action
+          - condition: template
+            value_template: '{{ trigger.event.data.value == "held" }}'
+        sequence: !input 'hold_action'
       - conditions:
-          - condition: trigger
-            id:
-              - double
-        sequence: !input double_press_action
-    default: !input press_action
+          - condition: template
+            value_template: '{{ trigger.event.data.value == "double" }}'
+        sequence: !input 'double_press_action'
+    default: !input 'press_action'
 
 mode: single
