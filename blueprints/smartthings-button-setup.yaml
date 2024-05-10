@@ -40,19 +40,37 @@ trigger:
   - platform: event
     event_type: smartthings.button
     event_data:
+      component_id: main
       device_id: !input button_id
+      value: pushed
+    id: pushed
+  - platform: event
+    event_type: smartthings.button
+    event_data:
+      component_id: main
+      device_id: !input button_id
+      value: double
+    id: double
+  - platform: event
+    event_type: smartthings.button
+    event_data:
+      component_id: main
+      device_id: !input button_id
+      value: held
+    id: held
 
 action:
   - choose:
-    - conditions:
-        - condition: template
-          value_template: '{{ trigger.event.data.value == "pushed" }}'
-      sequence: !input press_action
-    - conditions:
-      - condition: template
-        value_template: '{{ trigger.event.data.value == "double" }}'
-      sequence: !input double_press_action
-    - conditions:
-      - condition: template
-        value_template: '{{ trigger.event.data.value == "held" }}'
-      sequence: !input hold_action
+      - conditions:
+          - condition: trigger
+            id:
+              - held
+        sequence: !input hold_action
+      - conditions:
+          - condition: trigger
+            id:
+              - double
+        sequence: !input double_press_action
+    default: !input press_action
+
+mode: single
