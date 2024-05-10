@@ -9,8 +9,8 @@ blueprint:
       description: The button device to configure
       selector:
         device:
-          entity:
-            - device_class: button
+          filter:
+            - integration: smartthings
     press_action:
       name: Press Action
       description: Action to perform on "press" event
