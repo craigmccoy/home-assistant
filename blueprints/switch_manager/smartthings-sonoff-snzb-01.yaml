@@ -1,0 +1,18 @@
+name: Sonoff SNZB 01
+service: SmartThings
+event_type: smartthings.button
+identifier_key: device_id
+buttons:
+  - actions:
+      - title: press
+        conditions:
+          - key: value
+            value: pushed
+      - title: double press
+        conditions:
+          - key: value
+            value: double
+      - title: hold
+        conditions:
+          - key: value
+            value: held
